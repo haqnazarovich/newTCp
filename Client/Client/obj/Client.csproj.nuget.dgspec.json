@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Asus\\Downloads\\newTCP-20210308T171441Z-001\\newTCP\\Client\\Client\\Client.csproj": {}
+    "D:\\учеба\\new\\Client\\Client\\Client.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Asus\\Downloads\\newTCP-20210308T171441Z-001\\newTCP\\Client\\Client\\Client.csproj": {
+    "D:\\учеба\\new\\Client\\Client\\Client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Asus\\Downloads\\newTCP-20210308T171441Z-001\\newTCP\\Client\\Client\\Client.csproj",
+        "projectUniqueName": "D:\\учеба\\new\\Client\\Client\\Client.csproj",
         "projectName": "Client",
-        "projectPath": "C:\\Users\\Asus\\Downloads\\newTCP-20210308T171441Z-001\\newTCP\\Client\\Client\\Client.csproj",
+        "projectPath": "D:\\учеба\\new\\Client\\Client\\Client.csproj",
         "packagesPath": "C:\\Users\\Asus\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Asus\\Downloads\\newTCP-20210308T171441Z-001\\newTCP\\Client\\Client\\obj\\",
+        "outputPath": "D:\\учеба\\new\\Client\\Client\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",

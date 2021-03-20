@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Asus\\Downloads\\newTCP-20210308T171441Z-001\\newTCP\\Server\\Server\\Server.csproj": {}
+    "D:\\учеба\\new\\Server\\Server\\Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Asus\\Downloads\\newTCP-20210308T171441Z-001\\newTCP\\Server\\Server\\Server.csproj": {
+    "D:\\учеба\\new\\Server\\Server\\Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Asus\\Downloads\\newTCP-20210308T171441Z-001\\newTCP\\Server\\Server\\Server.csproj",
+        "projectUniqueName": "D:\\учеба\\new\\Server\\Server\\Server.csproj",
         "projectName": "Server",
-        "projectPath": "C:\\Users\\Asus\\Downloads\\newTCP-20210308T171441Z-001\\newTCP\\Server\\Server\\Server.csproj",
+        "projectPath": "D:\\учеба\\new\\Server\\Server\\Server.csproj",
         "packagesPath": "C:\\Users\\Asus\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Asus\\Downloads\\newTCP-20210308T171441Z-001\\newTCP\\Server\\Server\\obj\\",
+        "outputPath": "D:\\учеба\\new\\Server\\Server\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",

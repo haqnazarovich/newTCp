@@ -37,3 +37,16 @@ C:\Users\Asus\Downloads\newTCP-20210308T171441Z-001\newTCP\Server\Server\obj\Deb
 C:\Users\Asus\Downloads\newTCP-20210308T171441Z-001\newTCP\Server\Server\obj\Debug\netcoreapp3.1\Server.dll
 C:\Users\Asus\Downloads\newTCP-20210308T171441Z-001\newTCP\Server\Server\obj\Debug\netcoreapp3.1\Server.pdb
 C:\Users\Asus\Downloads\newTCP-20210308T171441Z-001\newTCP\Server\Server\obj\Debug\netcoreapp3.1\Server.genruntimeconfig.cache
+D:\учеба\new\Server\Server\bin\Debug\netcoreapp3.1\Server.exe
+D:\учеба\new\Server\Server\bin\Debug\netcoreapp3.1\Server.deps.json
+D:\учеба\new\Server\Server\bin\Debug\netcoreapp3.1\Server.runtimeconfig.json
+D:\учеба\new\Server\Server\bin\Debug\netcoreapp3.1\Server.runtimeconfig.dev.json
+D:\учеба\new\Server\Server\bin\Debug\netcoreapp3.1\Server.dll
+D:\учеба\new\Server\Server\bin\Debug\netcoreapp3.1\Server.pdb
+D:\учеба\new\Server\Server\obj\Debug\netcoreapp3.1\Server.csprojAssemblyReference.cache
+D:\учеба\new\Server\Server\obj\Debug\netcoreapp3.1\Server.AssemblyInfoInputs.cache
+D:\учеба\new\Server\Server\obj\Debug\netcoreapp3.1\Server.AssemblyInfo.cs
+D:\учеба\new\Server\Server\obj\Debug\netcoreapp3.1\Server.csproj.CoreCompileInputs.cache
+D:\учеба\new\Server\Server\obj\Debug\netcoreapp3.1\Server.dll
+D:\учеба\new\Server\Server\obj\Debug\netcoreapp3.1\Server.pdb
+D:\учеба\new\Server\Server\obj\Debug\netcoreapp3.1\Server.genruntimeconfig.cache

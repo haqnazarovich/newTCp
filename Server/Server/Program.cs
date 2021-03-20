@@ -1,30 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Server
 {
-    class Program
-    {
-        static int port;
-        static IPAddress serverIp;
-        static TcpListener tcpListener;
-        static Random random = new Random();
-        //static List<TcpClient> tcpClients = new List<TcpClient>();
-		static int clientNumber;
-		static bool obrabotka = false;
+	class Program
+	{
+		static int port;
+		static IPAddress serverIp;
+		static TcpListener tcpListener;
+		static string path;
+		static List<Client> Clients = new List<Client>();
+		static int ThreadNumber;
 
 		static void Main(string[] args)
-        {
-            Console.WriteLine("Введите ip-адрес сервера");
-            serverIp = IPAddress.Parse(Console.ReadLine());
-            Console.WriteLine("Введите номер порта для сервера");
-            port = int.Parse(Console.ReadLine());
+		{
+			Console.WriteLine("Введите ip-адрес сервера");
+			serverIp = IPAddress.Parse(Console.ReadLine());
+			Console.WriteLine("Введите номер порта для сервера");
+			port = int.Parse(Console.ReadLine());
 			Console.Clear();
+
+			path = Directory.GetCurrentDirectory() + @"\EventLog.txt";
+			File.WriteAllText(path, "Event log\n");
+
 			Thread listenThread = new Thread(new ThreadStart(Listen));
 			listenThread.Start();
 		}
@@ -39,10 +44,8 @@ namespace Server
 				TcpClient tcpClient = tcpListener.AcceptTcpClient();
 				if (tcpClient != null)
 				{
-					//tcpClients.Add(tcpClient);
-					clientNumber = clientNumber + 1;
-					Client client = new Client(tcpClient);
-					Thread clientThread = new Thread(new ThreadStart(client.Process));
+					Clients.Add(new Client(tcpClient, ThreadNumber++, Clients.Count));
+					Thread clientThread = new Thread(new ThreadStart(Clients.Last().Process));
 					clientThread.Start();
 				}
 			}
@@ -52,22 +55,29 @@ namespace Server
 		class Client
 		{
 			TcpClient tcpClient;
+			int ThreadNumber;
+			Random random = new Random();
+			bool obrabotka = false;
+			int ClientNumber;
 
-			public Client(TcpClient newtcpClient)
+			public Client(TcpClient newtcpClient, int threadNumber, int clientNumber)
 			{
 				tcpClient = newtcpClient;
+				ThreadNumber = threadNumber;
+				ClientNumber = clientNumber;
 			}
 
 			public void Process()
 			{
 				NetworkStream Stream = tcpClient.GetStream();
-				Console.WriteLine("Клиент с номером потока {0} - подключился", clientNumber - 1);
+				Console.WriteLine("Клиент с номером потока {0} - подключился", ThreadNumber);
+				File.AppendAllText(path, "Клиент с номером потока " + ThreadNumber + " - подключился\n");
 				string oldMessage = null;
 				while (true)
 				{
 					try
 					{
-						if ((clientNumber - 1) <= 2)
+						if (ClientNumber <= 2)
 						{
 							string newMessage = GetMessage(Stream);
 
@@ -97,11 +107,12 @@ namespace Server
 							SendMessage("Превышен лимит потоков, попробуйте позже", Stream);
 						}
 					}
-					catch
+					catch (Exception ex)
 					{
-						Console.WriteLine("Клиент с номером потока {0} - отключился", clientNumber - 1);
-						clientNumber = clientNumber - 1;
-						break;
+						Console.WriteLine("Клиент с номером потока {0} - отключился", ThreadNumber);
+						File.AppendAllText(path, "Клиент с номером потока " + ThreadNumber + " - отключился\n");
+						Clients.Remove(this);
+						return;
 					}
 				}
 			}
@@ -121,7 +132,14 @@ namespace Server
 			void SendMessage(string message, NetworkStream stream)
 			{
 				byte[] data = Encoding.Unicode.GetBytes(message);
-				stream.Write(data, 0, data.Length);
+				try
+				{
+					stream.Write(data, 0, data.Length);
+				}
+				catch (Exception ex)
+				{
+					return;
+				}
 			}
 
 			async void ProcessingMessage(string message, NetworkStream stream)
@@ -130,92 +148,13 @@ namespace Server
 				{
 					obrabotka = true;
 					Thread.Sleep(5000);
-					Console.WriteLine("Номер клинта {0}, " + DateTime.Now.ToShortTimeString() + ": " + message, clientNumber - 1);
-					string messageWithValue = message + ": " + random.Next(80, 85) / 10;
+					Console.WriteLine("Номер клиeнта {0}, " + DateTime.Now.ToShortTimeString() + ": " + message, ThreadNumber);
+					File.AppendAllText(path, "Номер клиeнта " + ThreadNumber + " " + DateTime.Now.ToShortTimeString() + ": " + message + "\n");
+					string messageWithValue = message + ": " + random.Next(80, 85) / 10.0;
 					SendMessage(messageWithValue, stream);
 					obrabotka = false;
 				});
 			}
 		}
 	}
-
-	//static void Process()
-	//{
-	//	Stream = tcpClients[clientNumber - 1].GetStream();
-	//	Console.WriteLine("Клиент с номером потока {0} - подключился", clientNumber - 1);
-	//	string oldMessage = null;
-	//	while (true)
-	//	{
-	//		try
-	//		{
-	//			if ((clientNumber - 1) <= 2)
-	//			{
-	//				string newMessage = GetMessage();
-
-	//				if (oldMessage != newMessage && obrabotka != false)
-	//				{
-	//					string attention = "Запрос уже обрабатывается!";
-	//					SendMessage(attention);
-	//				}
-	//				else
-	//				{
-	//					if (oldMessage == newMessage && obrabotka != false)
-	//					{
-	//						string attention = "Сервер не закончил обработку предыдущего запроса!";
-	//						SendMessage(attention);
-	//					}
-	//					else
-	//					{
-	//						oldMessage = newMessage;
-	//						ProcessingMessage(oldMessage);
-	//						oldMessage = null;
-	//					}
-	//				}
-	//			}
-	//			else
-	//			{
-	//				GetMessage();
-	//				SendMessage("Превышен лимит потоков, попробуйте позже");
-	//			}
-	//		}
-	//		catch
-	//		{
-	//			Console.WriteLine("Клиент с номером потока {0} - отключился", clientNumber - 1);
-	//			clientNumber = clientNumber - 1;
-	//			break;
-	//		}
-	//	}
-	//}
-
-	//static string GetMessage()
-	//{
-	//	string message = null;
-	//	do
-	//	{
-	//		byte[] data = new byte[256];
-	//		int bytes = Stream.Read(data, 0, data.Length);
-	//		message = Encoding.Unicode.GetString(data, 0, bytes);
-	//	}
-	//	while (Stream.DataAvailable);
-
-	//	return message;
-	//}
-	//static void SendMessage(string message)
-	//{
-	//	byte[] data = Encoding.Unicode.GetBytes(message);
-	//	Stream.Write(data, 0, data.Length);
-	//}
-
-	//static async void ProcessingMessage(string message)
-	//{
-	//	await Task.Run(() =>
-	//	{
-	//		obrabotka = true;
-	//		Thread.Sleep(5000);
-	//		Console.WriteLine("Номер клинта {0}, " + DateTime.Now.ToShortTimeString() + ": " + message, clientNumber - 1);
-	//		string messageWithValue = message + ": " + random.Next(80, 85) / 10;
-	//		SendMessage(messageWithValue);
-	//		obrabotka = false;
-	//	});
-	//}
 }
