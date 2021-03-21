@@ -14,9 +14,7 @@ namespace Client
 		static TcpClient Client;
 		static NetworkStream Stream;
 		static Random random = new Random();
-		static string[] Requests = new[] { "зачет", "удовлетворительно", "3", "хорошо" };
 		static string path;
-		static StringBuilder stringbuilder = new StringBuilder();
 		static Thread SendThread;
 		static Thread GetThread;
 
@@ -51,7 +49,7 @@ namespace Client
 		{
 			while (true)
 			{
-				string message = Requests[random.Next(3)];
+				string message = string.Concat(random.Next(80, 85) / 10.0);
 				if (message == "exit")
 					Exit();
 				byte[] data = Encoding.Unicode.GetBytes(message);

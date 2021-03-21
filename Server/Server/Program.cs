@@ -18,6 +18,7 @@ namespace Server
 		static string path;
 		static List<Client> Clients = new List<Client>();
 		static int ThreadNumber;
+		static string[] Answers = new[] { "зачет ", "удовлетворительно ", "три ", "хорошо " };
 
 		static void Main(string[] args)
 		{
@@ -54,11 +55,11 @@ namespace Server
 
 		class Client
 		{
+			public int ClientNumber;
 			TcpClient tcpClient;
 			int ThreadNumber;
 			Random random = new Random();
 			bool obrabotka = false;
-			int ClientNumber;
 
 			public Client(TcpClient newtcpClient, int threadNumber, int clientNumber)
 			{
@@ -112,6 +113,10 @@ namespace Server
 						Console.WriteLine("Клиент с номером потока {0} - отключился", ThreadNumber);
 						File.AppendAllText(path, "Клиент с номером потока " + ThreadNumber + " - отключился\n");
 						Clients.Remove(this);
+						for (int i = 0; i < Clients.Count; i++)
+						{
+							Clients[i].ClientNumber = i;
+						}
 						return;
 					}
 				}
@@ -148,10 +153,10 @@ namespace Server
 				{
 					obrabotka = true;
 					Thread.Sleep(5000);
-					Console.WriteLine("Номер клиeнта {0}, " + DateTime.Now.ToShortTimeString() + ": " + message, ThreadNumber);
-					File.AppendAllText(path, "Номер клиeнта " + ThreadNumber + " " + DateTime.Now.ToShortTimeString() + ": " + message + "\n");
-					string messageWithValue = message + ": " + random.Next(80, 85) / 10.0;
-					SendMessage(messageWithValue, stream);
+					string str = DateTime.Now.ToShortTimeString() + ": " + Answers[random.Next(3)] + message;
+					Console.WriteLine("Номер клиeнта {0}, " + str, ThreadNumber);
+					File.AppendAllText(path, "Номер клиeнта " + ThreadNumber + " " + str + "\n");
+					SendMessage(message, stream);
 					obrabotka = false;
 				});
 			}
