@@ -19,6 +19,9 @@ namespace Server
 		static List<Client> Clients = new List<Client>();
 		static int ThreadNumber;
 		static string[] Answers = new[] { "зачет ", "удовлетворительно ", "три ", "хорошо " };
+		static List<Tuple<Client, string>> ClientWithDublet = new List<Tuple<Client, string>>();
+		static List<string> MessagesInProcces = new List<string>();
+
 
 		static void Main(string[] args)
 		{
@@ -56,10 +59,11 @@ namespace Server
 		class Client
 		{
 			public int ClientNumber;
+			public NetworkStream Stream;
 			TcpClient tcpClient;
 			int ThreadNumber;
 			Random random = new Random();
-			bool obrabotka = false;
+			bool serverIsBusy = false;
 
 			public Client(TcpClient newtcpClient, int threadNumber, int clientNumber)
 			{
@@ -70,7 +74,7 @@ namespace Server
 
 			public void Process()
 			{
-				NetworkStream Stream = tcpClient.GetStream();
+				Stream = tcpClient.GetStream();
 				Console.WriteLine("Клиент с номером потока {0} - подключился", ThreadNumber);
 				File.AppendAllText(path, "Клиент с номером потока " + ThreadNumber + " - подключился\n");
 				string oldMessage = null;
@@ -81,17 +85,18 @@ namespace Server
 						if (ClientNumber <= 2)
 						{
 							string newMessage = GetMessage(Stream);
-
-							if (oldMessage != newMessage && obrabotka != false)
+							if (MessagesInProcces.Any(m => m == newMessage))
 							{
-								string attention = "Запрос уже обрабатывается!";
+								string attention = "Данный запрос уже находится в обработке!";
 								SendMessage(attention, Stream);
+								if (ClientWithDublet.All(c => c.Item2 != newMessage))
+									ClientWithDublet.Add(new Tuple<Client, string>(this, newMessage));
 							}
 							else
 							{
-								if (oldMessage == newMessage && obrabotka != false)
+								if (serverIsBusy)
 								{
-									string attention = "Сервер не закончил обработку предыдущего запроса!";
+									string attention = "Запрос уже обрабатывается!";
 									SendMessage(attention, Stream);
 								}
 								else
@@ -151,13 +156,35 @@ namespace Server
 			{
 				await Task.Run(() =>
 				{
-					obrabotka = true;
+					serverIsBusy = true;
+					MessagesInProcces.Add(message);
+
 					Thread.Sleep(5000);
-					string str = DateTime.Now.ToShortTimeString() + ": " + Answers[random.Next(3)] + message;
-					Console.WriteLine("Номер клиeнта {0}, " + str, ThreadNumber);
-					File.AppendAllText(path, "Номер клиeнта " + ThreadNumber + " " + str + "\n");
-					SendMessage(message, stream);
-					obrabotka = false;
+					var answer = Answers[random.Next(3)];
+					string fullAnswer = DateTime.Now.ToShortTimeString() + ": " + answer + message;
+					Console.WriteLine("Номер клиeнта {0}, " + fullAnswer, ThreadNumber);
+					SendMessage(fullAnswer, stream);
+
+					var clients = ClientWithDublet.Where(c => c.Item2 == message);
+					var clientNumbers = clients.Select(c => c.Item1);
+					foreach (var clientWithDuplet in clientNumbers)
+					{
+						var client = Clients.FirstOrDefault(c => c.ClientNumber == clientWithDuplet.ClientNumber);
+						if (client == null)
+							continue;
+
+						Console.WriteLine("Номер клиeнта {0}, " + fullAnswer, client.ThreadNumber);
+					}
+
+					clients.Distinct();
+					foreach (var clientWithDuplet in clients.ToList())
+					{
+						SendMessage(fullAnswer, clientWithDuplet.Item1.Stream);
+						ClientWithDublet.Remove(clientWithDuplet);
+					}
+
+					MessagesInProcces.Remove(message);
+					serverIsBusy = false;
 				});
 			}
 		}

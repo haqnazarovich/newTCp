@@ -15,11 +15,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\учеба\\new\\Server\\Server\\Server.csproj",
+      "projectUniqueName": "C:\\Users\\Asus\\Source\\Repos\\newTCp\\Server\\Server\\Server.csproj",
       "projectName": "Server",
-      "projectPath": "D:\\учеба\\new\\Server\\Server\\Server.csproj",
+      "projectPath": "C:\\Users\\Asus\\Source\\Repos\\newTCp\\Server\\Server\\Server.csproj",
       "packagesPath": "C:\\Users\\Asus\\.nuget\\packages\\",
-      "outputPath": "D:\\учеба\\new\\Server\\Server\\obj\\",
+      "outputPath": "C:\\Users\\Asus\\Source\\Repos\\newTCp\\Server\\Server\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",

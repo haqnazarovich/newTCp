@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "3hVWHYnNt1Lh0Vsh/p13zkkAwD7ntpLwqdLjs29BgzijDNasLQ+2hvaqJD91VYJzMas7YBeKoxfEt3B4lgJlkw==",
+  "dgSpecHash": "IXtuuF7jVkuwi6smAOyypZrwnGvusY6h0svXZjPYaU/lH/O4slFxhnZFLLEcbE8L6JrPDm4OA+X0/YSMDJHv1g==",
   "success": true,
-  "projectFilePath": "D:\\учеба\\new\\Server\\Server\\Server.csproj",
+  "projectFilePath": "C:\\Users\\Asus\\Source\\Repos\\newTCp\\Server\\Server\\Server.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
